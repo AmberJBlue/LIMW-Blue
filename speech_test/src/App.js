@@ -5,7 +5,8 @@ import {
   sphere,
   bounce,
   displayText,
-  run
+  run,
+  particles
  } from './components/animations';
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import "./App.css";
@@ -47,6 +48,10 @@ const App  = () => {
         <div label="Animation 3">
         {interim.toString()}
         <ReactP5Wrapper sketch={run} text={interim.toString()} />
+        </div>
+        <div label="Animation 4">
+        {interim.toString()}
+        <ReactP5Wrapper sketch={particles} text={interim.toString()} />
         </div>
       </Tabs>
     </div>

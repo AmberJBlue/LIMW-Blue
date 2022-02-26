@@ -324,3 +324,69 @@ export function animationOne(p5) {
     hasReachedTarget = false;
   }
   }
+
+  export function particles(p5) { 
+    let font;
+    let points;
+    let bounds;
+    let message;
+
+    p5.preload = () => {
+      font = p5.loadFont('./assets/Avenir.otf');
+    }
+
+    p5.updateWithProps = props => {
+      if (props.text) {
+        message = props.text
+        console.log(message)
+      }
+    };
+
+    p5.setup = () => {
+      p5.createCanvas(p5.windowWidth, p5.windowHeight);
+
+      
+        p5.cursor(p5.CROSS);
+        p5.fill(255, 127);
+        p5.noStroke();
+    }
+
+
+
+    p5.draw = () => {
+      points = font.textToPoints(
+        message, 0, 0, 200, {
+          sampleFactor: 1,
+          simplifyThreshold: 0
+        });
+
+      bounds = font.textBounds(
+        message, 0, 0, 200);
+
+      p5.background(0);
+      
+      p5.stroke(51);
+      p5.line(p5.width / 2, 0, p5.width / 2, p5.height);
+      p5.line(0, p5.height / 2, p5.width, p5.height / 2);
+      p5.noStroke();
+      
+      let centerDist = p5.dist(p5.mouseX, p5.mouseY, p5.width / 2, p5.height / 2);
+
+      let transparency = p5.map(centerDist, 0, p5.width / 2, 200, 50);
+      transparency = p5.constrain(transparency, 50, 200);
+      p5.fill(255, transparency);
+      
+      let jiggle = p5.map(centerDist, 0, p5.width, 1, 300);
+
+      p5.translate((p5.width - p5.abs(bounds.w)) / 2, 
+                (p5.height + p5.abs(bounds.h)) / 2);
+      
+      
+      for (let i = 0; i < points.length; i++) {
+        let p = points[i];
+        p5.ellipse(p.x + jiggle * p5.randomGaussian(), 
+          p.y + jiggle * p5.randomGaussian(), 5, 5);
+      }
+
+    }
+  }
