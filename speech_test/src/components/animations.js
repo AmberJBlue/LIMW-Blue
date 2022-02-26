@@ -52,7 +52,7 @@ export function animationOne(p5) {
 
     let pg = p5.createGraphics(800, 800); // rectangle that will be mapped onto sphere
     p5.preload = () => {
-      img = p5.loadImage('UV_Grid_Sm.jpg');
+      img = p5.loadImage('./UV_Grid_Sm.jpg');
     }
 
     p5.setup = () => {
