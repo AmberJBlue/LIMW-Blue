@@ -1,1 +1,6 @@
 node_modules
+speech_test/package-lock.json
+speech_test/package-lock.json
+speech_test/package.json
+speech_test/build/*
+speech_test/node_modules/*
