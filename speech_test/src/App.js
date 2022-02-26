@@ -1,6 +1,12 @@
 import React from 'react';
 import Tabs from "./components/Tabs";
-import { animationOne, sphere } from './components/animations';
+import { 
+  animationOne,
+  sphere,
+  bounce,
+  displayText,
+  run
+ } from './components/animations';
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import "./App.css";
 
@@ -31,15 +37,16 @@ const App  = () => {
       <h1>Speech-to-text Demo</h1>
       <Tabs>
         <div label="Animation 1">
-        {console.log(transcript  ? interim = transcript : interim = "Say something positive.")}
-        {interim.toString()}
-        <ReactP5Wrapper sketch={sphere} text={interim.toString()} />
+        {transcript  ? interim = transcript : interim = "Say something positive."}
+        {/* {interim.toString()} */}
+        {/* <ReactP5Wrapper sketch={sphere} text={interim.toString()} /> */}
         </div>
         <div label="Animation 2">
-        <p>{interim}</p>
+        <ReactP5Wrapper sketch={displayText} text={interim.toString()} />
         </div>
         <div label="Animation 3">
-          <p>{interim}</p>
+        {interim.toString()}
+        <ReactP5Wrapper sketch={run} text={interim.toString()} />
         </div>
       </Tabs>
     </div>

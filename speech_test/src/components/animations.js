@@ -56,7 +56,7 @@ export function animationOne(p5) {
     }
 
     p5.setup = () => {
-      this.textBuffer = '\n'
+      this.textBuffer = text
       p5.createCanvas(canvasWidth, canvasHeight, p5.WEBGL);
       
       pg.textSize(40); // size of text
@@ -106,4 +106,221 @@ export function animationOne(p5) {
       time += 0.03;  // update the time
       
     }
+  }
+
+  export function bounce(p5) {
+    let x, y;
+
+    p5.setup = () => {
+      p5.createCanvas(720, 400);
+      // Starts in the middle
+      x = p5.width / 2;
+      y = p5.height;
+    }
+
+    p5.draw = () => {
+      p5.background(200);
+      
+      // Draw a circle
+      p5.stroke(50);
+      p5.fill(100);
+      p5.ellipse(x, y, 24, 24);
+      
+      // Jiggling randomly on the horizontal axis
+      x = x + p5.random(-1, 1);
+      // Moving up at a constant speed
+      y = y - 1;
+      
+      // Reset to the bottom
+      if (y < 0) {
+        y = p5.height;
+      }
+    }
+
+  }
+
+  export function displayText(p5) {
+    let text = "Say something positive.";
+    p5.setup = () => {
+      p5.createCanvas(720, 400);
+    }
+    p5.updateWithProps = props => {
+      if (props.text) {
+        text = props.text
+      }
+    };
+    
+    p5.draw = () => {
+      p5.background(51);
+      p5.fill(255);
+      p5.textFont("monospace", 18);
+      p5.text(text, 8, 60);
+      p5.textFont("sans-serif", 24);
+      p5.text(text, 8, 100);  
+      p5.textFont("serif", 38);
+      p5.text(text, 8, 145);
+    }
+  }
+
+  export function run(p5) { 
+
+  let message="Say something positive.";
+  var positions = [];
+  var targets = [];
+
+  let runFont;
+  let restFont;
+
+  let runTowards = true;
+  let runSpeed = 40;
+  let restSpeed = -1;
+  let currentSpeed = restSpeed;
+  let ts = 94;
+
+  let pauseTime = 1000;
+  let reachedTargetAt = 0;
+  let hasReachedTarget = true;
+
+  p5.preload = () => {
+    runFont = p5.loadFont("./assets/Poppins-SemiBoldItalic.ttf");
+    restFont = p5.loadFont("./assets/Poppins-SemiBold.ttf");
+  }
+
+  p5.updateWithProps = props => {
+    if (props.text) {
+      message = props.text
+    }
+  };
+
+  p5.setup = () => {
+    p5.createCanvas(1000, 500);
+    
+    // Set up the positions and targets arrays
+    while(positions.push([0, 0]) < message.length);
+    while(targets.push([0, 0]) < message.length);
+    
+    p5.textSize(ts);
+    p5.textFont(restFont);
+    
+    p5.fill(0);
+    p5.background(255);
+
+    p5.pickNewTarget();
+  }
+
+  p5.draw = () => {  
+    p5.background(255);
+    p5.fill(0);
+      
+    if (hasReachedTarget){
+      p5.textFont(restFont);
+      
+      if (runTowards){
+        p5.fill(255, 0, 0);
+      }
+      
+      let elapsedTime = p5.millis() - reachedTargetAt;
+
+      if (elapsedTime > pauseTime){
+        p5.pickNewTarget();
+      }
+    }
+    else {
+      p5.textFont(runFont);
+    }
+
+    p5.drawChars();
+    
+    p5.updatePositions();
+    p5.updateCurrentSpeed();
+  }
+
+  p5.mousePressed = () => {
+    p5.pickNewTarget();
+  }
+
+  p5.drawChars = () => {
+    for (let i = 0; i < message.length; i++){
+      p5.text(message.charAt(i), positions[i][0], positions[i][1]);
+    }
+  }
+
+  p5.updatePositions = () => {
+    let allHaveReached = true;
+    let thisHasReached = false;
+    
+    // Update the positions a little bit
+    for (let i = 0; i < message.length; i++){
+      let distX = p5.abs(positions[i][0] - targets[i][0]);
+      let distY = p5.abs(positions[i][1] - targets[i][1]);
+
+      let changeX = p5.random(currentSpeed);
+      let changeY = p5.random(currentSpeed);
+
+      thisHasReached = changeX > distX && changeY > distY;
+      
+      if (positions[i][0] > targets[i][0]){
+        changeX = -changeX;
+      }
+      
+      if (positions[i][1] > targets[i][1]){
+        changeY = -changeY;
+      }
+      
+      positions[i][0] += changeX;
+      positions[i][1] += changeY;
+      
+      allHaveReached = allHaveReached && thisHasReached;
+    }
+    
+    if (!hasReachedTarget && allHaveReached){
+        hasReachedTarget = true;
+        reachedTargetAt = p5.millis();  
+      }
+  }
+
+  p5.updateCurrentSpeed = () => {
+    if (hasReachedTarget){
+      console.log('here')
+      // if (currentSpeed >= restSpeed){
+        currentSpeed = -1;
+      // }
+      // else {
+      //   currentSpeed += 1;
+      // }
+    }
+    else {
+      if (currentSpeed <= runSpeed){
+        currentSpeed = 1
+        // currentSpeed += (runSpeed - currentSpeed) * 0.25;
+      }
+      else {
+        currentSpeed -= 1;
+      }
+    }
+  }
+
+  p5.pickNewTarget = () => {
+    if (!runTowards && p5.random(1) > 0.75){
+      runTowards = true;
+      
+      let tX = p5.random(ts, p5.width - 3 * ts);
+      let tY = p5.random(ts, p5.height - ts);
+      
+      for (let i = 0; i < message.length; i++){
+        targets[i][0] = tX + i * ts;
+        targets[i][1] = tY;
+      }
+    }
+    else {
+      runTowards = false;
+      
+      for (let i = 0; i < message.length; i++){
+        targets[i][0] = p5.random(ts, p5.width - ts);
+        targets[i][1] = p5.random(ts, p5.height - ts);
+      }
+    }
+    
+    hasReachedTarget = false;
+  }
   }
