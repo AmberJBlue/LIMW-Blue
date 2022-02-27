@@ -30,28 +30,27 @@ const App  = () => {
   return (
 
     <div>
-      <p>Microphone: {listening ? 'on' : 'off'}</p>
+      <p>Microphone Status: {listening ? <span className="dot-red"></span> : <span className="dot"></span>}</p>
       <button onClick={SpeechRecognition.startListening}>Start</button>
       <button onClick={SpeechRecognition.stopListening}>Stop</button>
       <button onClick={resetTranscript}>Reset</button>
       <div>
       <h1>Speech-to-text Demo</h1>
+      <span>Speech Input: </span>{transcript  ? interim = transcript : interim = "Say something positive."}
       <Tabs>
-        <div label="Animation 1">
-        {transcript  ? interim = transcript : interim = "Say something positive."}
-        {/* {interim.toString()} */}
-        {/* <ReactP5Wrapper sketch={sphere} text={interim.toString()} /> */}
+        <div label="Particles">
+          {interim.toString()}
+          <ReactP5Wrapper sketch={particles} text={interim.toString()} />
         </div>
-        <div label="Animation 2">
-        <ReactP5Wrapper sketch={displayText} text={interim.toString()} />
-        </div>
-        <div label="Animation 3">
+        <div label="Run">
         {interim.toString()}
         <ReactP5Wrapper sketch={run} text={interim.toString()} />
         </div>
-        <div label="Animation 4">
-        {interim.toString()}
-        <ReactP5Wrapper sketch={particles} text={interim.toString()} />
+        <div label="Sphere">
+        <ReactP5Wrapper sketch={sphere} text={interim.toString()} />
+        </div>
+        <div label="Font Samples">
+        <ReactP5Wrapper sketch={displayText} text={interim.toString()} />
         </div>
       </Tabs>
     </div>
