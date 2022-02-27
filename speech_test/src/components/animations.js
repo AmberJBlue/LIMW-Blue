@@ -338,6 +338,15 @@ export function animationOne(p5) {
       if (props.text) {
         message = props.text
       }
+
+      // console.log(message.length)
+      // for (let i = 0; i < message.length; i++) {
+      //   if (message.charAt(i) !== " ") {
+      //     message = message.slice(0, i) + "-\n" + message.slice(i)
+      //   } else {
+      //     message = message.slice(0, i) + "-\n" + message.slice(i)
+      //   }
+      // }
     };
 
     p5.setup = () => {
@@ -358,15 +367,14 @@ export function animationOne(p5) {
         message, 0, 0, 200);
 
       p5.background(0);
-      
       p5.stroke(51);
       p5.line(p5.width / 2, 0, p5.width / 2, p5.height);
       p5.line(0, p5.height / 2, p5.width, p5.height / 2);
       p5.noStroke();
       
       let centerDist = p5.dist(p5.mouseX, p5.mouseY, p5.width / 2, p5.height / 2);
-
       let transparency = p5.map(centerDist, 0, p5.width / 2, 200, 50);
+
       transparency = p5.constrain(transparency, 50, 200);
       p5.fill(255, transparency);
       
