@@ -22,7 +22,7 @@ export function animationOne(p5) {
 
   export function sphere(p5) { 
     let time = 0;
-    var img; // for the UV Grid (used to map the image to the sphere)
+    // var img; // for the UV Grid (used to map the image to the sphere)
 
     // Overall main output canvas size
     // let canvasWidth = 3840;
@@ -54,7 +54,7 @@ export function animationOne(p5) {
 
     let pg = p5.createGraphics(800, 800); // rectangle that will be mapped onto sphere
     p5.preload = () => {
-      img = p5.loadImage('./UV_Grid_Sm.jpg');
+      // img = p5.loadImage('./UV_Grid_Sm.jpg');
     }
 
     p5.setup = () => {
@@ -67,9 +67,9 @@ export function animationOne(p5) {
        p5.perspective(p5.PI * fov / 180.0, p5.width / p5.height, 0.1, 2000);
     }
 
-    p5.keyTyped = () => {
-      textBuffer += p5.key;
-    }
+    // p5.keyTyped = () => {
+    textBuffer += p5.key;
+    // }
 
     p5.keyPressed = () => {
       if (p5.keyCode === p5.BACKSPACE) {
@@ -83,7 +83,7 @@ export function animationOne(p5) {
       p5.background(0);
       
       // set the virtual camera position
-      p5.camera(p5.cameraX, p5.cameraY, p5.cameraZ, p5.centerX, p5.centerY, p5.centerZ, 0, 1, 0);
+      p5.camera(cameraX, cameraY, cameraZ, centerX, centerY, centerZ, 0, 1, 0);
       
       // include some light even in shadows
       p5.ambientLight(100, 100, 100);
@@ -95,15 +95,13 @@ export function animationOne(p5) {
       pg.text(textBuffer, -4, 0);
 
       //pass image as texture
-      p5.vtexture(pg);
+      p5.texture(pg);
       p5.noStroke();
       
       p5.push();
       p5.rotate(0.25 * time, centerAxis);
       p5.sphere(40);
       p5.pop();
-      
-
       
       time += 0.03;  // update the time
       
@@ -303,28 +301,27 @@ export function animationOne(p5) {
   }
 
   p5.pickNewTarget = () => {
-    if (!runTowards && p5.random(1) > 0.75){
-      runTowards = true;
-      
-      let tX = p5.random(ts, p5.width - 3 * ts);
-      let tY = p5.random(ts, p5.height - ts);
-      
-      for (let i = 0; i < message.length; i++){
-        targets[i][0] = tX + i * ts;
-        targets[i][1] = tY;
+      if (!runTowards && p5.random(1) > 0.75){
+        runTowards = true;
+        
+        let tX = p5.random(ts, p5.width - 3 * ts);
+        let tY = p5.random(ts, p5.height - ts);
+        
+        for (let i = 0; i < message.length; i++){
+          targets[i][0] = tX + i * ts;
+          targets[i][1] = tY;
+        }
       }
-    }
-    else {
-      runTowards = false;
-      
-      for (let i = 0; i < message.length; i++){
-        targets[i][0] = p5.random(ts, p5.width - ts);
-        targets[i][1] = p5.random(ts, p5.height - ts);
+      else {
+        runTowards = false;
+        
+        for (let i = 0; i < message.length; i++){
+          targets[i][0] = p5.random(ts, p5.width - ts);
+          targets[i][1] = p5.random(ts, p5.height - ts);
+        }
       }
+      hasReachedTarget = false;
     }
-    
-    hasReachedTarget = false;
-  }
   }
 
   export function particles(p5) { 
@@ -340,20 +337,15 @@ export function animationOne(p5) {
     p5.updateWithProps = props => {
       if (props.text) {
         message = props.text
-        console.log(message)
       }
     };
 
     p5.setup = () => {
       p5.createCanvas(p5.windowWidth, p5.windowHeight);
-
-      
-        p5.cursor(p5.CROSS);
-        p5.fill(255, 127);
-        p5.noStroke();
+      p5.cursor(p5.CROSS);
+      p5.fill(255, 127);
+      p5.noStroke();
     }
-
-
 
     p5.draw = () => {
       points = font.textToPoints(
@@ -383,12 +375,10 @@ export function animationOne(p5) {
       p5.translate((p5.width - p5.abs(bounds.w)) / 2, 
                 (p5.height + p5.abs(bounds.h)) / 2);
       
-      
       for (let i = 0; i < points.length; i++) {
         let p = points[i];
         p5.ellipse(p.x + jiggle * p5.randomGaussian(), 
           p.y + jiggle * p5.randomGaussian(), 5, 5);
       }
-
     }
   }
