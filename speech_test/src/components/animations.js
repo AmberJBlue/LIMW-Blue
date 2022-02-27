@@ -25,8 +25,10 @@ export function animationOne(p5) {
     var img; // for the UV Grid (used to map the image to the sphere)
 
     // Overall main output canvas size
-    let canvasWidth = 3840;
-    let canvasHeight = 2160;
+    // let canvasWidth = 3840;
+    // let canvasHeight = 2160;
+    let canvasWidth = 720;
+    let canvasHeight = 400;
 
     // Pool dimensions
     let poolWidth = 3072;
@@ -42,11 +44,11 @@ export function animationOne(p5) {
     let centerY = 0;
     let centerZ = 0;
 
-    let text = "Say something positive."
+    let textBuffer = "Say something positive."
 
     p5.updateWithProps = props => {
       if (props.text) {
-        text = props.text
+        textBuffer = props.text
       }
     };
 
@@ -56,7 +58,7 @@ export function animationOne(p5) {
     }
 
     p5.setup = () => {
-      this.textBuffer = text
+      // this.textBuffer = text
       p5.createCanvas(canvasWidth, canvasHeight, p5.WEBGL);
       
       pg.textSize(40); // size of text
@@ -66,14 +68,14 @@ export function animationOne(p5) {
     }
 
     p5.keyTyped = () => {
-      this.textBuffer += p5.key;
+      textBuffer += p5.key;
     }
 
     p5.keyPressed = () => {
       if (p5.keyCode === p5.BACKSPACE) {
-        this.textBuffer = this.textBuffer.slice(0, -1);
+        textBuffer = textBuffer.slice(0, -1);
       } else if (p5.keyCode === p5.ENTER) {
-        this.textBuffer += "\n";
+        textBuffer += "\n";
       }
     }
 
@@ -81,7 +83,7 @@ export function animationOne(p5) {
       p5.background(0);
       
       // set the virtual camera position
-      p5.camera(cameraX, cameraY, cameraZ, centerX, centerY, centerZ, 0, 1, 0);
+      p5.camera(p5.cameraX, p5.cameraY, p5.cameraZ, p5.centerX, p5.centerY, p5.centerZ, 0, 1, 0);
       
       // include some light even in shadows
       p5.ambientLight(100, 100, 100);
@@ -90,7 +92,7 @@ export function animationOne(p5) {
       
       //pg.background(200);
       pg.fill(255);
-      pg.text(this.textBuffer, -4, 0);
+      pg.text(textBuffer, -4, 0);
 
       //pass image as texture
       p5.vtexture(pg);
@@ -172,7 +174,7 @@ export function animationOne(p5) {
   let restFont;
 
   let runTowards = true;
-  let runSpeed = 40;
+  let runSpeed = 3;
   let restSpeed = -1;
   let currentSpeed = restSpeed;
   let ts = 94;
@@ -291,8 +293,8 @@ export function animationOne(p5) {
     }
     else {
       if (currentSpeed <= runSpeed){
-        currentSpeed = 1
-        // currentSpeed += (runSpeed - currentSpeed) * 0.25;
+        // currentSpeed = 1
+        currentSpeed += (runSpeed - currentSpeed) * 0.25;
       }
       else {
         currentSpeed -= 1;
